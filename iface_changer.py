@@ -9,7 +9,11 @@ def get_arguments():
     parser.add_option("-n","--netmask",dest="new_netmask", help="New netmask address")
     parser.add_option("-b","--broadcast",dest="new_broadcast", help="New broadcast address")
     parser.add_option("-m","--mac",dest="new_mac", help="New MAC address")
-    return parser.parse_args()
+    (options, arguments) = parser.parse_args()
+    if not options.interface:
+        print("[!] Please specify an interface, use --help for more info.")
+        
+    return options
 
 def change_ip(interface, new_ip):
     print("[+] Changing ip address for " + interface + " to " + new_ip)
@@ -28,10 +32,13 @@ def change_mac(interface, new_mac):
     subprocess.call(["ifconfig", interface, "down"])
     subprocess.call(["ifconfig", interface, "hw", "ether", new_mac])
     subprocess.call(["ifconfig", interface, "up"])
-    
 
-(options, arguments) = get_arguments()
-change_ip(options.interface, options.new_ip)
-change_netmask(options.interface, options.new_netmask)
-change_broadcast(options.interface, options.new_broadcast)
-change_mac(options.interface, options.new_mac)
+options = get_arguments()
+if options.new_ip:
+    change_ip(options.interface, options.new_ip)
+if options.new_netmask:
+    change_netmask(options.interface, options.new_netmask)
+if options.new_broadcast:
+    change_broadcast(options.interface, options.new_broadcast)
+if options.new_mac:
+    change_mac(options.interface, options.new_mac)
