@@ -8,10 +8,9 @@ def get_arguments():
     parser.add_option("-i","--ip",dest="new_ip", help="New IP address")
     return parser.parse_args()
 
-def change_mac(interface, new_ip):
+def change_ip(interface, new_ip):
     print("[+] Changing ip address for " + interface + " to " + new_ip)
-    subprocess.call(["ifconfig", interface, "hw", "ether", new_ip])
-    subprocess.call(["ifconfig", interface, "up"])
+    subprocess.call(["ifconfig", interface, new_ip])
 
 (options, arguments) = get_arguments()
-change_mac(options.interface, options.new_ip)
+change_ip(options.interface, options.new_ip)
